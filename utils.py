@@ -1,5 +1,6 @@
 from collections import defaultdict
-from gensim.utils import tokenize as gensim_tokenize
+import nltk
+from nltk.tokenize import RegexpTokenizer
 class TextTokenizer:
     def __init__(self, repetition_threshold):
         self.repetition_threshold = repetition_threshold
@@ -7,10 +8,11 @@ class TextTokenizer:
         self.token_dict = {'<SOS>': 0, '<UNK>': 1, '<EOS>': 2}
         self.reverse_token_dict = {0: '<SOS>', 1: '<UNK>', 2: '<EOS>'}
         self.next_index = 3
+        self.tokenizer = RegexpTokenizer(r"[\w']+|[.,!?;:&()\n]")
 
     def tokenize(self, text):
         """Tokenizes the text into words."""
-        return list(gensim_tokenize(text))
+        return self.tokenizer.tokenize(text)
 
     def track_word_frequencies(self, tokens):
         """Tracks the frequency of each word."""
