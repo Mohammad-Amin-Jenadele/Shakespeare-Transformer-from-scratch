@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+from gensim.utils import tokenize as gensim_tokenize
 class TextTokenizer:
     def __init__(self, repetition_threshold):
         self.repetition_threshold = repetition_threshold
@@ -10,7 +10,7 @@ class TextTokenizer:
 
     def tokenize(self, text):
         """Tokenizes the text into words."""
-        return text.split()
+        return list(gensim_tokenize(text))
 
     def track_word_frequencies(self, tokens):
         """Tracks the frequency of each word."""
