@@ -1,6 +1,8 @@
 from collections import defaultdict
 import nltk
 from nltk.tokenize import RegexpTokenizer
+import torch
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 class TextTokenizer:
     def __init__(self, repetition_threshold):
         self.repetition_threshold = repetition_threshold
@@ -64,5 +66,14 @@ class TextTokenizer:
         token_list.insert(0, self.token_dict['<SOS>'])
         token_list.append(self.token_dict['<EOS>'])
         return token_list
+
+
+
+def get_batch(dataset , batch_size , block_size):
+    ix = torch.randint(len(dataset) - block_size , size = (batch_size,))
+    x = torch.stack([dataset[i : i + block_size] for i in ix])
+    y = torch.stack([dataset[i + 1 : i + block_size + 1] for i in ix])
+    x , y = x.to(device) , y.to(device)
+    return x , y
 
     
